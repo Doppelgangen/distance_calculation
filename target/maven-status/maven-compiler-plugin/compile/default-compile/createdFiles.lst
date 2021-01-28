@@ -1,0 +1,5 @@
+com\vikmak\distance\utils\Resources.class
+com\vikmak\distance\dao\CityDAO.class
+com\vikmak\distance\entity\City.class
+com\vikmak\distance\Calculation.class
+com\vikmak\distance\entity\Distance.class

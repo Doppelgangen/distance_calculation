@@ -2,6 +2,9 @@ package com.vikmak.distance.dao;
 
 import com.vikmak.distance.entity.City;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -9,12 +12,22 @@ import javax.ws.rs.core.MediaType;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Viktor Makarov
  */
 
+@ApplicationScoped
+@Path("/cities")
 public class CityDAO {
+
+    @Inject
+    private Logger logger;
+
+    @Inject
+    private EntityManager entityManager;
+
     private static final String URL = "jdbc:mysql://localhost:3306/distance_calculator";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
