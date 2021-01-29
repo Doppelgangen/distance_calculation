@@ -29,6 +29,16 @@ public class City implements Serializable {
     @NotNull
     private double longitude;
 
+    public City() {
+    }
+
+    public City(long id, @NotNull String name, @NotNull double latitude, @NotNull double longitude) {
+        this.id = id;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public long getId() {
         return id;
     }
@@ -86,6 +96,4 @@ public class City implements Serializable {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
-
-
 }
