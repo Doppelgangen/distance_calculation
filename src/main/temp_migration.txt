@@ -1,0 +1,29 @@
+Here'll be database creation for future migration:
+CREATE DATABASE distance_calculator;
+
+CREATE TABLE `cities` (
+  `id` bigint NOT NULL,
+  `name` varchar(85) NOT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+);
+
+CREATE TABLE `distances` (
+  `id` bigint NOT NULL,
+  `origin` bigint NOT NULL,
+  `destination` bigint NOT NULL,
+  `distance` double NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_origin_idx` (`origin`),
+  KEY `city_dest_fk_idx` (`destination`),
+  CONSTRAINT `city_dest_fk` FOREIGN KEY (`destination`) REFERENCES `cities` (`id`),
+  CONSTRAINT `city_origin_fk` FOREIGN KEY (`origin`) REFERENCES `cities` (`id`)
+);
+
+INSERT INTO `cities` (`id`,`name`,`latitude`,`longitude`) VALUES (1,'Samara',53.2038,50.1606);
+INSERT INTO `cities` (`id`,`name`,`latitude`,`longitude`) VALUES (2,'Helsinki',60.1699,24.9384);
+
+INSERT INTO `distances` (`id`,`origin`,`destination`,`distance`) VALUES (1,1,2,1709.5919278940116);
+INSERT INTO `distances` (`id`,`origin`,`destination`,`distance`) VALUES (2,2,1,1709.5919278940116);
