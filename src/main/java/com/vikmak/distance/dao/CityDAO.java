@@ -1,10 +1,9 @@
 package com.vikmak.distance.dao;
 
 import com.vikmak.distance.entity.City;
+import com.vikmak.distance.services.CityService;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
@@ -25,25 +24,7 @@ import java.util.List;
 @Path("/cities")
 public class CityDAO {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/distance_calculator";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-
-    private static Connection connection;
-
-    static {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
+    Connection connection = CityService.getConnection();
 
     @GET
     @Path("/")
@@ -70,19 +51,25 @@ public class CityDAO {
         return cities;
     }
 
-    @GET
-    @Path("/1")
+    @POST
+    @Path("/addNewCities")
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public Response hello(){
-        City city = new City(1, "Mos", 23, 35);
-        return Response.ok(city).build();
+    public Response addNewCities(List<City> newCities) {
+        for (City city : newCities) {
+            addCityToDB(city);
+        }
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/2")
+    //Overload for different types of XML input - single input or collection
+    @POST
+    @Path("/addNewCities")
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public City test() {
-        return new City(1, "Mos", 33, 55);
+    public Response addNewCity(City newCity) {
+        addCityToDB(newCity);
+        return Response.ok().build();
     }
 
     @GET
@@ -105,5 +92,22 @@ public class CityDAO {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         city = (City) unmarshaller.unmarshal(new File("C:/Java_env/file.xml"));
         return Response.ok(city).build();
+    }
+
+    private void addCityToDB(City newCity) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO cities (name, latitude, longitude) VALUES (?, ?, ?)");
+
+            //Removing "/n" symbols from XML file
+            String prettyString = newCity.getName().replaceAll("\\W*", "");
+
+            preparedStatement.setString(1, prettyString);
+            preparedStatement.setDouble(2, newCity.getLatitude());
+            preparedStatement.setDouble(3, newCity.getLongitude());
+            preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

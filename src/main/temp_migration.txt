@@ -2,13 +2,13 @@ Here'll be database creation for future migration:
 CREATE DATABASE distance_calculator;
 
 CREATE TABLE `cities` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(85) NOT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-);
+)AUTO_INCREMENT=1;
 
 CREATE TABLE `distances` (
   `id` bigint NOT NULL,
