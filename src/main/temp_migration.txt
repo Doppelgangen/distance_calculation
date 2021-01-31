@@ -12,18 +12,18 @@ CREATE TABLE `cities` (
 
 CREATE TABLE `distances` (
   `id` bigint NOT NULL,
-  `origin` bigint NOT NULL,
-  `destination` bigint NOT NULL,
+  `from city` bigint NOT NULL,
+  `to city` bigint NOT NULL,
   `distance` double NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_origin_idx` (`origin`),
-  KEY `city_dest_fk_idx` (`destination`),
-  CONSTRAINT `city_dest_fk` FOREIGN KEY (`destination`) REFERENCES `cities` (`id`),
-  CONSTRAINT `city_origin_fk` FOREIGN KEY (`origin`) REFERENCES `cities` (`id`)
+  KEY `id_origin_idx` (`from city`),
+  KEY `city_dest_fk_idx` (`to city`),
+  CONSTRAINT `city_dest_fk` FOREIGN KEY (`to city`) REFERENCES `cities` (`id`),
+  CONSTRAINT `city_origin_fk` FOREIGN KEY (`from city`) REFERENCES `cities` (`id`)
 );
 
 INSERT INTO `cities` (`id`,`name`,`latitude`,`longitude`) VALUES (1,'Samara',53.2038,50.1606);
 INSERT INTO `cities` (`id`,`name`,`latitude`,`longitude`) VALUES (2,'Helsinki',60.1699,24.9384);
 
-INSERT INTO `distances` (`id`,`origin`,`destination`,`distance`) VALUES (1,1,2,1709.5919278940116);
-INSERT INTO `distances` (`id`,`origin`,`destination`,`distance`) VALUES (2,2,1,1709.5919278940116);
+INSERT INTO `distances` (`id`,`from city`,`to city`,`distance`) VALUES (1,1,2,1709.5919278940116);
+INSERT INTO `distances` (`id`,`from city`,`to city`,`distance`) VALUES (2,2,1,1709.5919278940116);

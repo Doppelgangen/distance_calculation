@@ -16,11 +16,11 @@ public class Distance implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JoinColumn(name = "origin")
+    @JoinColumn(name = "from city")
     @ManyToOne(targetEntity = City.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private long origin;
 
-    @JoinColumn(name = "destination")
+    @JoinColumn(name = "to city")
     @ManyToOne(targetEntity = City.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private long destination;
 
