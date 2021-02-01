@@ -2,6 +2,7 @@ package com.vikmak.distance.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "cities")
 public class City implements Serializable {
+
     @Id
     @GeneratedValue
     private long id;

@@ -21,7 +21,13 @@
     <p>
     City to : <input type="text" name="cityTo"/>
     </p>
-    <button type="submit" >Choose</button>
+    <button type="submit">Show</button>
+</form>
+<br/>
+<h4>Add new cities</h4>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button type="submit">Submit</button>
 </form>
 </body>
 </html>
