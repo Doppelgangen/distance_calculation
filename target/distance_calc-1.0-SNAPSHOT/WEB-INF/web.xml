@@ -13,11 +13,20 @@
 
   <servlet>
     <servlet-name>UploadServlet</servlet-name>
-    <servlet-class>com.vikmak.distance.UploadServlet</servlet-class>
+    <servlet-class>com.vikmak.distance.servlets.UploadServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>UploadServlet</servlet-name>
     <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ShowDistanceServlet</servlet-name>
+    <servlet-class>com.vikmak.distance.servlets.ShowDistanceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShowDistanceServlet</servlet-name>
+    <url-pattern>/showDistance</url-pattern>
   </servlet-mapping>
 
 </web-app>

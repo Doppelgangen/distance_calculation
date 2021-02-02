@@ -2,19 +2,14 @@ package com.vikmak.distance.dao;
 
 import com.vikmak.distance.entity.City;
 import com.vikmak.distance.services.CityService;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import com.vikmak.distance.utils.Cities;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,7 +28,7 @@ public class CityDAO {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_XML)
-    public List<City> cities() {
+    public Cities citiesList() {
         List<City> cities = new ArrayList<City>();
 
         try {
@@ -52,36 +47,38 @@ public class CityDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return cities;
+        Cities output = new Cities();
+        output.setCities(cities);
+        return output;
     }
 
-    /*
-        @POST
-        @Path("/addNewCities")
-        @Consumes(MediaType.APPLICATION_XML)
-        @Produces(MediaType.APPLICATION_XML)
-        public Response addNewCities(List<City> newCities) {
-            for (City city : newCities) {
-                addCityToDB(city);
-            }
-            return Response.ok().build();
+
+    @POST
+    @Path("/addNewCities")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response addNewCities(Cities newCities) {
+        for (City city : newCities.getCities()) {
+            addCityToDB(city);
         }
+        return Response.ok().build();
+    }
 
-        //Overload for different types of XML input - single input or collection
-        @POST
-        @Path("/addNewCities")
-        @Consumes(MediaType.APPLICATION_XML)
-        @Produces(MediaType.APPLICATION_XML)
-        public Response addNewCity(City newCity) {
-            addCityToDB(newCity);
-            return Response.ok().build();
-        }*/
+    //Overload for different types of XML input - single input or collection
+    @POST
+    @Path("/addNewCities")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response addNewCity(City newCity) {
+        addCityToDB(newCity);
+        return Response.ok().build();
+    }
 
-    //Parsing xml file
+    //Parsing XML file
     @GET
     @Path("/addNewCities")
     @Produces(MediaType.APPLICATION_XML)
-    public Response addNewCityXml(@QueryParam("param") String message) {
+    public Response addNewCityXml(@QueryParam("param") String message) throws JAXBException {
 
         switch (message) {
             case "ok":
@@ -98,30 +95,13 @@ public class CityDAO {
                 break;
         }
 
-        File file = new File(CityService.getPath() + "NewCities.xml");
-        try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(file);
+        Cities cities;
+        JAXBContext context = JAXBContext.newInstance(Cities.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        cities = (Cities) unmarshaller.unmarshal(new File(CityService.getPath() + "NewCities.xml"));
 
-            doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("city");
-
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-
-                Node nNode = nList.item(temp);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    City city = new City();
-                    Element eElement = (Element) nNode;
-                    city.setName(eElement.getElementsByTagName("name").item(0).getTextContent());
-                    city.setLatitude(Double.parseDouble(eElement.getElementsByTagName("latitude").item(0).getTextContent()));
-                    city.setLongitude(Double.parseDouble(eElement.getElementsByTagName("longitude").item(0).getTextContent()));
-                    addCityToDB(city);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (City city : cities.getCities()) {
+            addCityToDB(city);
         }
         return Response.ok().build();
     }
@@ -137,18 +117,8 @@ public class CityDAO {
             marshaller.marshal(city, new File("C:/Java_env/file2.xml"));
             return Response.ok(city).build();
         }
+*/
 
-        @GET
-        @Path("/4")
-        @Produces(MediaType.APPLICATION_XML)
-        public Response jaxb2() throws JAXBException {
-            City city = new City();
-            JAXBContext context = JAXBContext.newInstance(City.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            city = (City) unmarshaller.unmarshal(new File("C:/Java_env/file2.xml"));
-            return Response.ok(city).build();
-        }
-    */
     private void addCityToDB(City newCity) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(

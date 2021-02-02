@@ -1,11 +1,10 @@
-package com.vikmak.distance;
+package com.vikmak.distance.servlets;
 
 import com.vikmak.distance.services.CityService;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ public class UploadServlet extends HttpServlet {
         super();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String message = "";
         if (ServletFileUpload.isMultipartContent(request)) {
             try {
@@ -34,6 +33,7 @@ public class UploadServlet extends HttpServlet {
                 message = "error";
             }
         } else {
+            //File not found
             message = "none";
         }
         response.sendRedirect("/rest/cities/addNewCities?param=" + message);
