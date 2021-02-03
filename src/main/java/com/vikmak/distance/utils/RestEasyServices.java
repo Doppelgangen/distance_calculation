@@ -1,7 +1,6 @@
 package com.vikmak.distance.utils;
 
-import com.vikmak.distance.dao.CityDAO;
-import com.vikmak.distance.dao.DistanceDAO;
+import com.vikmak.distance.controllers.CityController;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -17,8 +16,7 @@ public class RestEasyServices extends Application {
     private Set<Object> singletons = new HashSet<Object>();
 
     public RestEasyServices() {
-        singletons.add(new CityDAO());
-        singletons.add(new DistanceDAO());
+        singletons.add(new CityController());
     }
 
     @Override

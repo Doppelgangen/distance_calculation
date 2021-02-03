@@ -1,10 +1,13 @@
 <html>
+<head>
+    <title>Distance calculation</title>
+</head>
+
 <body>
-<h2>
-    <a>Hello there!</a>
-</h2>
 <h4>
     <a href="/rest/cities">Display list of all cities</a>
+    <br/>
+    <a href="/rest/cities/xml">Display list of all cities in XML</a>
 </h4>
 <br/>
 <form action="/showDistance" method="post">

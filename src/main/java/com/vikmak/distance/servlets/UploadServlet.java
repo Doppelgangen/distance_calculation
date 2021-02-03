@@ -1,6 +1,6 @@
 package com.vikmak.distance.servlets;
 
-import com.vikmak.distance.services.CityService;
+import com.vikmak.distance.dao.CityDAO;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -24,7 +24,7 @@ public class UploadServlet extends HttpServlet {
                 List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
                 for (FileItem item : multiparts) {
                     if (!item.isFormField()) {
-                        item.write(new File(CityService.getPath() + "NewCities.xml"));
+                        item.write(new File(CityDAO.getPath() + "NewCities.xml"));
                     }
                 }
                 //File uploaded successfully
