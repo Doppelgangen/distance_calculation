@@ -2,7 +2,7 @@ Database name for project is : distance_calculator
 (not distance-calculator)
 
 Liquibase updates by "mvn liquibase:update"
-This migration adding 10 cities to database.
+This migration also adding 10 cities to database.
 
 Index page of project provides necessary fields:
 Cities list:
