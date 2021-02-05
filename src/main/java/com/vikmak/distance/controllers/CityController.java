@@ -1,17 +1,25 @@
 package com.vikmak.distance.controllers;
 
-import com.vikmak.distance.entity.City;
 import com.vikmak.distance.dao.CityDAO;
+import com.vikmak.distance.entity.City;
 import com.vikmak.distance.utils.Cities;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.sql.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +40,7 @@ public class CityController {
     @Path("/")
     @Produces(MediaType.TEXT_PLAIN)
     public Response citiesList() {
-        HashMap<Long, String> display= new HashMap<>();
+        HashMap<Long, String> display = new HashMap<>();
 
         try {
             Statement statement = connection.createStatement();
@@ -76,43 +84,48 @@ public class CityController {
         output.setCities(cities);
         return output;
     }
-/*
-    @POST
-    @Path("/addNewCities")
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
-    public Response addNewCities(Cities newCities) {
-        for (City city : newCities.getCities()) {
-            addCityToDB(city);
-        }
-        return Response.ok().build();
-    }
 
-    //Overload for different types of XML input - single input or collection
-    @POST
-    @Path("/addNewCities")
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
-    public Response addNewCity(City newCity) {
-        addCityToDB(newCity);
-        return Response.ok().build();
-    }
-*/
+    /*
+        @POST
+        @Path("/addNewCities")
+        @Consumes(MediaType.APPLICATION_XML)
+        @Produces(MediaType.APPLICATION_XML)
+        public Response addNewCities(Cities newCities) {
+            for (City city : newCities.getCities()) {
+                addCityToDB(city);
+            }
+            return Response.ok().build();
+        }
+
+        //Overload for different types of XML input - single input or collection
+        @POST
+        @Path("/addNewCities")
+        @Consumes(MediaType.APPLICATION_XML)
+        @Produces(MediaType.APPLICATION_XML)
+        public Response addNewCity(City newCity) {
+            addCityToDB(newCity);
+            return Response.ok().build();
+        }
+    */
     //Parsing XML file
     @GET
     @Path("/addNewCities")
     @Produces(MediaType.APPLICATION_XML)
-    public Response addNewCityXml(@QueryParam("param") String message) throws JAXBException {
+    public Response addNewCityXml(@QueryParam("param") String message) throws JAXBException, URISyntaxException {
+
+        URI error = new URI("/cities/error");
+        URI none = new URI("/cities/noFile");
+
         switch (message) {
             case "ok":
                 System.out.println("File uploaded");
                 break;
             case "error":
                 System.out.println("Error happened");
-                break;
+                return Response.temporaryRedirect(error).build();
             case "none":
                 System.out.println("File not found");
-                break;
+                return Response.temporaryRedirect(none).build();
             default:
                 System.out.println("Request without parameters");
                 break;
@@ -126,6 +139,18 @@ public class CityController {
         for (City city : cities.getCities()) {
             addCityToDB(city);
         }
-        return Response.ok().build();
+        return Response.status(200).build();
+    }
+
+    @GET
+    @Path("/error")
+    public Response errorPage() {
+        return Response.status(200).entity("Error happened during upload. Check upload file.").build();
+    }
+
+    @GET
+    @Path("/noFile")
+    public Response noFile() {
+        return Response.status(200).entity("No file have been uploaded. Please upload an xml file.").build();
     }
 }

@@ -29,7 +29,7 @@
 <br/>
 <h4>Add new cities</h4>
 <form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file">
+    <input type="file" name="file" accept="application/xml"/>
     <button type="submit">Submit</button>
 </form>
 </body>

@@ -19,29 +19,26 @@ public class UploadServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String message = "";
-        if (ServletFileUpload.isMultipartContent(request)) {
             try {
                 List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
                 for (FileItem item : multiparts) {
                     if (!item.isFormField()) {
+                        if (item.getName() == "") {
+                            message = "none";
+                            break;
+                        }
                         File uploadDir = new File(CityDAO.getPath());
                         if (!uploadDir.exists()) {
                             uploadDir.mkdir();
                         }
                         item.write(new File(CityDAO.getPath() + "NewCities.xml"));
+                        //File uploaded successfully
+                        message = "ok";
                     }
                 }
-                //File uploaded successfully
-                message = "ok";
             } catch (Exception ex) {
                 message = "error";
             }
-        } else {
-            //File not found
-            message = "none";
-        }
         response.sendRedirect("/rest/cities/addNewCities?param=" + message);
     }
-
-
 }
