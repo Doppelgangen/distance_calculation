@@ -1,4 +1,0 @@
-Southern, Western - negative
-
-Here'll be database creation for future migration:
-CREATE DATABASE distance_calculator;

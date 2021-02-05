@@ -31,9 +31,7 @@ public class CityController {
     @GET
     @Path("/")
     @Produces(MediaType.TEXT_PLAIN)
-
     public Response citiesList() {
-        List<City> cities = new ArrayList<City>();
         HashMap<Long, String> display= new HashMap<>();
 
         try {
@@ -56,7 +54,7 @@ public class CityController {
     @Path("/xml")
     @Produces(MediaType.APPLICATION_XML)
     public Cities citiesListXml() {
-        List<City> cities = new ArrayList<City>();
+        List<City> cities = new ArrayList<>();
 
         try {
             Statement statement = connection.createStatement();
@@ -130,17 +128,4 @@ public class CityController {
         }
         return Response.ok().build();
     }
-
-    /*
-        @GET
-        @Path("/3")
-        @Produces(MediaType.APPLICATION_XML)
-        public Response jaxb() throws JAXBException {
-            City city = new City(1, "Nox", 99, 380);
-            JAXBContext jaxbContext = JAXBContext.newInstance(City.class);
-            Marshaller marshaller = jaxbContext.createMarshaller();
-            marshaller.marshal(city, new File("C:/Java_env/file2.xml"));
-            return Response.ok(city).build();
-        }
-*/
 }

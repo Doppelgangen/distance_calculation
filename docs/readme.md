@@ -29,3 +29,8 @@ List should look like:
     </city>
 </cities>
 Id's are arranged automatically by the database.  
+
+Mostly application is ready:
+For start please run following commands:
+mvn liquibase:update
+mvn wildfly:run 
