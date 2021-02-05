@@ -5,7 +5,7 @@ Liquibase updates by "mvn liquibase:update"
 This migration also adding 10 cities to database.
 
 Please rearrange upload path at package com.vikmak.distance.dao.CityDAO if needed
-private static final String uploadPath = "C:\\calculation\\temp\\"; 
+private static final String uploadPath = "C:\\calculation\\"; 
 
 Index page of project provides necessary fields:
 Cities list:

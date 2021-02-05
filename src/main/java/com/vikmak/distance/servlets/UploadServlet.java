@@ -24,6 +24,10 @@ public class UploadServlet extends HttpServlet {
                 List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
                 for (FileItem item : multiparts) {
                     if (!item.isFormField()) {
+                        File uploadDir = new File(CityDAO.getPath());
+                        if (!uploadDir.exists()) {
+                            uploadDir.mkdir();
+                        }
                         item.write(new File(CityDAO.getPath() + "NewCities.xml"));
                     }
                 }
@@ -38,4 +42,6 @@ public class UploadServlet extends HttpServlet {
         }
         response.sendRedirect("/rest/cities/addNewCities?param=" + message);
     }
+
+
 }

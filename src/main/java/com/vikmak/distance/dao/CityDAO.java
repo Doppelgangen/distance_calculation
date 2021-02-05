@@ -15,10 +15,7 @@ public class CityDAO {
     private static final String URL = "jdbc:mysql://localhost:3306/distance_calculator";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
-    private static final String uploadPath = "C:\\calculation\\temp\\";
-//            "java:/magenta/datasource/test-distance-calculator";
-//
-//File uploads = new File(System.getProperty("jboss.server.data.dir"), "uploads");
+    private static final String uploadPath = "C:\\calculation\\";
 
     private static Connection connection;
 
