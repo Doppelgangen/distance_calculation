@@ -111,10 +111,11 @@ public class CityController {
     @GET
     @Path("/addNewCities")
     @Produces(MediaType.APPLICATION_XML)
-    public Response addNewCityXml(@QueryParam("param") String message) throws JAXBException, URISyntaxException {
+    public Response addNewCityXml(@QueryParam("param") String message) throws URISyntaxException {
 
         URI error = new URI("/cities/error");
         URI none = new URI("/cities/noFile");
+        URI incorrect = new URI("/cities/fileStructureError");
 
         switch (message) {
             case "ok":
@@ -132,12 +133,18 @@ public class CityController {
         }
 
         Cities cities;
-        JAXBContext context = JAXBContext.newInstance(Cities.class);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-        cities = (Cities) unmarshaller.unmarshal(new File(CityDAO.getPath() + "NewCities.xml"));
+        JAXBContext context = null;
+        try {
+            context = JAXBContext.newInstance(Cities.class);
 
-        for (City city : cities.getCities()) {
-            addCityToDB(city);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            cities = (Cities) unmarshaller.unmarshal(new File(CityDAO.getPath() + "NewCities.xml"));
+
+            for (City city : cities.getCities()) {
+                addCityToDB(city);
+            }
+        } catch (JAXBException e) {
+            return Response.temporaryRedirect(incorrect).build();
         }
         return Response.status(200).build();
     }
@@ -152,5 +159,14 @@ public class CityController {
     @Path("/noFile")
     public Response noFile() {
         return Response.status(200).entity("No file have been uploaded. Please upload an xml file.").build();
+    }
+
+    @GET
+    @Path("/fileStructureError")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response wrongFileStructure() {
+        return Response.status(200).entity("Check file structure. New node should be like:\n" +
+                        "<cities>\n\t<city>\n\t\t<name> </name>\n\t\t<latitude> </latitude>\n\t\t<longitude> </longitude>\n\t</city>\n</cities>")
+                .build();
     }
 }
