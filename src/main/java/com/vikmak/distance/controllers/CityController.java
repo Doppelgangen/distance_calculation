@@ -1,13 +1,11 @@
 package com.vikmak.distance.controllers;
 
+import com.sun.istack.NotNull;
 import com.vikmak.distance.dao.CityDAO;
 import com.vikmak.distance.entity.City;
 import com.vikmak.distance.utils.Cities;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
@@ -111,7 +109,7 @@ public class CityController {
     @GET
     @Path("/addNewCities")
     @Produces(MediaType.APPLICATION_XML)
-    public Response addNewCityXml(@QueryParam("param") String message) throws URISyntaxException {
+    public Response addNewCityXml(@NotNull @QueryParam("param") String message) throws URISyntaxException {
 
         URI error = new URI("/cities/error");
         URI none = new URI("/cities/noFile");
@@ -145,6 +143,8 @@ public class CityController {
             }
         } catch (JAXBException e) {
             return Response.temporaryRedirect(incorrect).build();
+        } catch (ClassCastException e) {
+            return Response.temporaryRedirect(incorrect).build();
         }
         return Response.status(200).build();
     }
@@ -152,21 +152,27 @@ public class CityController {
     @GET
     @Path("/error")
     public Response errorPage() {
-        return Response.status(200).entity("Error happened during upload. Check upload file.").build();
+        return Response.status(400).entity("Error happened during upload. Check upload file.").build();
     }
 
     @GET
     @Path("/noFile")
     public Response noFile() {
-        return Response.status(200).entity("No file have been uploaded. Please upload an xml file.").build();
+        return Response.status(400).entity("No file have been uploaded. Please upload an xml file.").build();
     }
 
     @GET
     @Path("/fileStructureError")
     @Produces(MediaType.TEXT_PLAIN)
     public Response wrongFileStructure() {
-        return Response.status(200).entity("Check file structure. New node should be like:\n" +
-                        "<cities>\n\t<city>\n\t\t<name> </name>\n\t\t<latitude> </latitude>\n\t\t<longitude> </longitude>\n\t</city>\n</cities>")
+        return Response.status(400).entity("Check file structure. New node should be like:" +
+                "\n<cities>" +
+                "\n\t<city>" +
+                "\n\t\t<name> </name>" +
+                "\n\t\t<latitude> </latitude>" +
+                "\n\t\t<longitude> </longitude>" +
+                "\n\t</city>" +
+                "\n</cities>")
                 .build();
     }
 }

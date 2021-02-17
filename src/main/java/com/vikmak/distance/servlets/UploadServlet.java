@@ -23,7 +23,7 @@ public class UploadServlet extends HttpServlet {
                 List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
                 for (FileItem item : multiparts) {
                     if (!item.isFormField()) {
-                        if (item.getName() == "") {
+                        if (item.getName().equals("")) {
                             message = "none";
                             break;
                         }

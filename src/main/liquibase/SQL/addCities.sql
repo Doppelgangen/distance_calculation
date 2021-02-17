@@ -1,0 +1,10 @@
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Samara',53.2038,50.1606);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Helsinki',60.1699,24.9384);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Melbourne',-37.8136,144.9631);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('London',51.5074,-0.1278);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Berlin',52.5167,13.3833);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Ottawa',45.4215,-75.6972);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Madagascar',-18.7669,46.8691);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Paris',48.8566,2.3522);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Vatican City',41.9029,12.4534);
+INSERT INTO `cities` (`name`,`latitude`,`longitude`) VALUES ('Belgrade',44.7866,20.4489);
